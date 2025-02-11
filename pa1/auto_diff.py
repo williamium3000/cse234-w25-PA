@@ -371,7 +371,7 @@ class ExpandAsOp3d(Op):
         """Return the broadcasted tensor."""
         assert len(input_values) == 2
         input_tensor, target_tensor = input_values
-        print('expand_op',input_tensor.shape, target_tensor.shape)
+        # print('expand_op',input_tensor.shape, target_tensor.shape)
         return input_tensor.unsqueeze(1).expand_as(target_tensor)
 
     def gradient(self, node: Node, output_grad: Node) -> List[Node]:
@@ -573,8 +573,8 @@ class SoftmaxOp(Op):
     def gradient(self, node: Node, output_grad: Node) -> List[Node]:
         """Given gradient of softmax node, return partial adjoint to input."""
         """TODO: your code here"""
-        softmax_val = softmax(node.inputs[0], node.dim)
-        return [softmax_val * (output_grad - sum_op(softmax_val * output_grad, dim=node.dim, keepdim=True))]
+        # softmax_val = softmax(node.inputs[0], node.dim)
+        return [node * (output_grad - sum_op(node * output_grad, dim=node.dim, keepdim=True))]
         
 
     
