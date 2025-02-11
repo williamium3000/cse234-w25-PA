@@ -50,6 +50,8 @@ def softmax_loss(Z: ad.Node, y_one_hot: ad.Node, batch_size: int) -> ad.Node:
     y_one_hot: ad.Node
         A node in of shape (batch_size, num_classes), containing the
         one-hot encoding of the ground truth label for the batch of instances.
+        
+        
 
     batch_size: int
         The size of the mini-batch.
@@ -69,6 +71,16 @@ def softmax_loss(Z: ad.Node, y_one_hot: ad.Node, batch_size: int) -> ad.Node:
     Try to think about why our softmax loss may need the batch size.
     """
     """TODO: Your code here"""
+
+    softmax_Z = ad.softmax(Z, dim=-1)
+    log_softmax_Z = ad.log(softmax_Z)
+    cross_entropy_loss = ad.sum_op(y_one_hot * log_softmax_Z, dim=1)
+
+    loss = ad.sum_op(cross_entropy_loss)
+    avg_loss = ad.div_by_const(loss, batch_size)
+    avg_loss = ad.mul_by_const(avg_loss, -1)
+    
+    return avg_loss
 
 
 
